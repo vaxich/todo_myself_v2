@@ -15,7 +15,7 @@ export type FilterValueType = "All" | "Active" | "Completed"
 function App() {
 
   const [filterValue, setFilterValue] = useState<FilterValueType>("All")
-  
+
   const [tasks, setTasks] = useState<TaskType[]>([
     { id: crypto.randomUUID(), title: 'HTML&CSS', isDone: true },
     { id: crypto.randomUUID(), title: 'JS', isDone: true },
@@ -27,10 +27,14 @@ function App() {
     setFilterValue(newFilterValue)
   }
 
-  const removeTask = (taskId:string) => {
-    const newTaskList = tasks.filter( task => task.id !== taskId)
+  const removeTask = (taskId: string) => {
+    const newTaskList = tasks.filter(task => task.id !== taskId)
     setTasks(newTaskList)
+  }
 
+  const AddTask = (newTaskTitle: string) => {
+    const newTask = { id: crypto.randomUUID(), title: newTaskTitle, isDone: false };
+    setTasks([newTask, ...tasks])
   }
 
   const FilteredRasksForTodolist = (tasks: TaskType[], newFilterValue: FilterValueType) => {
@@ -52,12 +56,13 @@ function App() {
 
   return (
     <div className="App">
-      <Todolist 
-      title='what to learn' 
-      tasks={filteredTaksForRender} 
-      changeFilter={changeFilter} 
-      filterValue={filterValue} 
-      removeTask = {removeTask}
+      <Todolist
+        title='what to learn'
+        tasks={filteredTaksForRender}
+        changeFilter={changeFilter}
+        filterValue={filterValue}
+        removeTask={removeTask}
+        AddTask={AddTask}
       />
 
     </div>

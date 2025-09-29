@@ -12,7 +12,7 @@ export const Button = (props: ButtonPropsType) => {
     
         return (
             <div>
-                <button >{props.title}</button>
+                <button onClick={ () => {}}>{props.title}</button>
             </div>
         )
     }
