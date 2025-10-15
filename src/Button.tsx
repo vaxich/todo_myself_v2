@@ -2,32 +2,12 @@ import { FilterValueType } from "./App"
 
 type ButtonPropsType = {
     title: string | FilterValueType
-    onClick?: (value: string) => void
-    filterValue?: FilterValueType
+    onClick?: () => void
+    className? : string
 
 }
 
-export const Button = (props: ButtonPropsType) => {
+export const Button = ({ title, onClick, className }: ButtonPropsType) => {
+  return <button className={className} onClick={onClick}>{title}</button>
+}
 
-    
-        return (
-            <div>
-                <button onClick={ () => {}}>{props.title}</button>
-            </div>
-        )
-    }
-
-
-// export const Button = (props: ButtonPropsType) => {
-// const handleClick = () => {
-// if (props.onClick && props.filterValue !== undefined) {
-// props.onClick(props.filterValue);
-// }
-// };
-
-// return (
-// <div>
-// <button onClick={handleClick}>{props.title}</button>
-// </div>
-// );
-// };

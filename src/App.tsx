@@ -15,6 +15,7 @@ export type FilterValueType = "All" | "Active" | "Completed"
 function App() {
 
   const [filterValue, setFilterValue] = useState<FilterValueType>("All")
+ 
 
   const [tasks, setTasks] = useState<TaskType[]>([
     { id: crypto.randomUUID(), title: 'HTML&CSS', isDone: true },
@@ -35,6 +36,12 @@ function App() {
   const AddTask = (newTaskTitle: string) => {
     const newTask = { id: crypto.randomUUID(), title: newTaskTitle, isDone: false };
     setTasks([newTask, ...tasks])
+  }
+
+  const changeTaskStatus = (taskId: string, isDone: boolean ) => {
+    const newState = tasks.map( (task) => task.id === taskId ? {...task, isDone:isDone} : task )
+    setTasks(newState)
+    
   }
 
   const FilteredRasksForTodolist = (tasks: TaskType[], newFilterValue: FilterValueType) => {
@@ -63,6 +70,7 @@ function App() {
         filterValue={filterValue}
         removeTask={removeTask}
         AddTask={AddTask}
+        changeTaskStatus={changeTaskStatus}
       />
 
     </div>
