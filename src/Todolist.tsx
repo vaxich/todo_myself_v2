@@ -7,16 +7,18 @@ import { log } from "node:console";
 type TodolistPropsType = {
     title: string
     tasks: TaskType[]
-    changeFilter: (newFilterValue: FilterValueType) => void
+    changeFilter: (todolistId: string, newFilterValue: FilterValueType) => void
     filterValue: FilterValueType
-    removeTask: (taskId: string) => void
-    AddTask: (newTaskTitle: string) => void
-    changeTaskStatus: (taskId: string, isDone: boolean) => void
+    removeTask: (todolistId: string, taskId: string) => void
+    AddTask: (todolistId: string, newTaskTitle: string) => void
+    changeTaskStatus: (todolistId: string, taskId: string, isDone: boolean) => void
+    todolistId: string
+    removeTodolist: (todolistId: string) => void
 }
 
 export const Todolist = (props: TodolistPropsType) => {
 
-    const { title, tasks, changeFilter, filterValue, removeTask, AddTask, changeTaskStatus } = props;
+    const { title, tasks, changeFilter, filterValue, removeTask, AddTask, changeTaskStatus, todolistId, removeTodolist } = props;
 
     const [newTaskTitle, setNewTaskTitle] = useState("");
     const [error, setError] = useState<null | string>(null)
@@ -35,20 +37,25 @@ export const Todolist = (props: TodolistPropsType) => {
     const onClickButtonAddTask = () => {
         const trimmedTitle = newTaskTitle.trim()
         if (trimmedTitle != '') {
-            AddTask(newTaskTitle);
+            AddTask(todolistId, newTaskTitle);
             setNewTaskTitle("");
         } else {
             setError('поле не может быть пустым')
         }
+    }
 
-
-
+    const removeTodolistHandler = () => {
+        removeTodolist(todolistId)
     }
 
     return (
         <div className="todolist">
             <div>
-                <h3>{title}</h3>
+                <div>
+                    <h3>{title}</h3>
+                    <Button title="X" onClick={removeTodolistHandler} />
+                </div>
+
                 <div>
                     <input
                         value={newTaskTitle}
@@ -68,10 +75,10 @@ export const Todolist = (props: TodolistPropsType) => {
                         {tasks.map(task => {
 
                             const onClickDeleteTask = () => {
-                                removeTask(task.id)
+                                removeTask(todolistId, task.id)
                             }
                             const changeTaskStatusHandler = (event: ChangeEvent<HTMLInputElement>) => {
-                                changeTaskStatus(task.id, event.currentTarget.checked)
+                                changeTaskStatus(todolistId, task.id, event.currentTarget.checked)
 
                             }
 
@@ -96,13 +103,13 @@ export const Todolist = (props: TodolistPropsType) => {
                 <div>
                     <Button className={filterValue === 'All' ? 'active-filter' : ''}
                         title={'All'}
-                        onClick={() => changeFilter('All')} />
+                        onClick={() => changeFilter(todolistId, 'All')} />
                     <Button className={filterValue === 'Active' ? 'active-filter' : ''}
                         title={'Active'}
-                        onClick={() => changeFilter('Active')} />
+                        onClick={() => changeFilter(todolistId, 'Active')} />
                     <Button className={filterValue === 'Completed' ? 'active-filter' : ''}
                         title={'Completed'}
-                        onClick={() => changeFilter('Completed')} />
+                        onClick={() => changeFilter(todolistId, 'Completed')} />
 
 
                 </div>
