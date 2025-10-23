@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import './App.css';
 import { Todolist } from './Todolist';
+import { AddItemForm } from './AddItemForm';
 
 
 export type TaskType = {
@@ -72,12 +73,29 @@ function App() {
     delete tasks[todolistId]
   }
 
+  const addTodolist = (newTitle: string) => {
+    let newTodolistId = crypto.randomUUID();
+    let newTodolist: Todolist = { id: newTodolistId, title: newTitle, filter: "All" }
+    setTodolists([...todolists, newTodolist])
+    setTasks({ ...tasks, [newTodolistId]: [] })
+  }
+
+  const onChangeTaskTitle = (todolistId: string, taskId: string, newTitle: string) => {
+    setTasks({ ...tasks, [todolistId]: tasks[todolistId].map(task => task.id === taskId ? { ...task, title: newTitle } : task) })
+  }
+
+  const onChangeTotolistTitle = (todolistId: string, newTodolistTitle: string) => {
+    setTodolists( todolists.map( tl => tl.id === todolistId ? {... tl, title: newTodolistTitle} : tl))
+  }
 
 
 
 
   return (
     <div className="App">
+
+      <AddItemForm onClick={addTodolist} />
+
       {
         todolists.map(tl => {
 
@@ -107,6 +125,8 @@ function App() {
               AddTask={AddTask}
               changeTaskStatus={changeTaskStatus}
               removeTodolist={removeTodolist}
+              onChangeTaskTitle={onChangeTaskTitle}
+              onChangeTotolistTitle={onChangeTotolistTitle}
             />
           )
         })
