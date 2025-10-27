@@ -3,7 +3,14 @@ import { useState } from 'react';
 import './App.css';
 import { Todolist } from './Todolist';
 import { AddItemForm } from './AddItemForm';
-
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 export type TaskType = {
   id: string
@@ -85,7 +92,7 @@ function App() {
   }
 
   const onChangeTotolistTitle = (todolistId: string, newTodolistTitle: string) => {
-    setTodolists( todolists.map( tl => tl.id === todolistId ? {... tl, title: newTodolistTitle} : tl))
+    setTodolists(todolists.map(tl => tl.id === todolistId ? { ...tl, title: newTodolistTitle } : tl))
   }
 
 
@@ -93,47 +100,70 @@ function App() {
 
   return (
     <div className="App">
+      <AppBar position="static">
+        <Toolbar>
+          <Container maxWidth={'lg'}>
+            <IconButton color="inherit">
+              <MenuIcon />
+            </IconButton>
+            <Button color="inherit">Sign in</Button>
+          </Container>
 
-      <AddItemForm onClick={addTodolist} />
+        </Toolbar>
+      </AppBar>
 
-      {
-        todolists.map(tl => {
+      <Container maxWidth={'lg'}>
+        <Grid container>
+          <AddItemForm onClick={addTodolist} />
+        </Grid>
 
-          const FilteredRasksForTodolist = (tasks: TaskType[], newFilterValue: FilterValueType) => {
-            switch (tl.filter) {
-              case 'Active': {
-                return tasks.filter(task => task.isDone === false)
+        <Grid container spacing={4}>
+
+
+          {
+            todolists.map(tl => {
+
+              const FilteredRasksForTodolist = (tasks: TaskType[], newFilterValue: FilterValueType) => {
+                switch (tl.filter) {
+                  case 'Active': {
+                    return tasks.filter(task => task.isDone === false)
+                  }
+                  case 'Completed': {
+                    return tasks.filter(task => task.isDone === true)
+                  }
+                  default:
+                    return tasks
+                }
               }
-              case 'Completed': {
-                return tasks.filter(task => task.isDone === true)
-              }
-              default:
-                return tasks
-            }
+
+              const filteredTaksForRender = FilteredRasksForTodolist(tasks[tl.id], tl.filter)
+
+              return (
+                <Grid>
+                  <Paper>
+                    <Todolist
+                      todolistId={tl.id}
+                      title={tl.title}
+                      tasks={filteredTaksForRender}
+                      changeFilter={changeFilter}
+                      filterValue={tl.filter}
+                      removeTask={removeTask}
+                      AddTask={AddTask}
+                      changeTaskStatus={changeTaskStatus}
+                      removeTodolist={removeTodolist}
+                      onChangeTaskTitle={onChangeTaskTitle}
+                      onChangeTotolistTitle={onChangeTotolistTitle}
+                    />
+                  </Paper>
+                </Grid>
+
+              )
+            })
           }
 
-          const filteredTaksForRender = FilteredRasksForTodolist(tasks[tl.id], tl.filter)
-
-          return (
-            <Todolist
-              todolistId={tl.id}
-              title={tl.title}
-              tasks={filteredTaksForRender}
-              changeFilter={changeFilter}
-              filterValue={tl.filter}
-              removeTask={removeTask}
-              AddTask={AddTask}
-              changeTaskStatus={changeTaskStatus}
-              removeTodolist={removeTodolist}
-              onChangeTaskTitle={onChangeTaskTitle}
-              onChangeTotolistTitle={onChangeTotolistTitle}
-            />
-          )
-        })
-      }
-
-
-    </div>
+        </Grid>
+      </Container>
+    </div >
   );
 }
 

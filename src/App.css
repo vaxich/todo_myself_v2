@@ -1,35 +1,14 @@
-.App {
-  padding: 10px;
+.app {
   display: flex;
-  background-color: blanchedalmond;
-  height: 100vh;
-}
-
-.App-div {
-  margin-right: 50px;
-}
-
-.todolist {
-  border: 2px solid grey;
-  background-color: beige;
-  border-radius: 5px;
-  padding: 15px;
-  height: max-content;
-
-}
-
-.error {
-  border: red 1px solid;
+  flex-direction: column;
+  width: 100vw;
 }
  
-.error-message {
-  color: red;
+.container {
+  display: flex;
+  align-items: center;
 }
-
-.active-filter {
-  background-color: lightgreen;
-}
-
+ 
 .is-done {
   opacity: 0.5;
 }
